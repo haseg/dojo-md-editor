@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html >
+  <head>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css">
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>
+    <script>
+    require(
+        ["dojo/ready", "dijit/InlineEditBox", "dijit/form/Textarea", "dojo/request", "dojo/string"],
+        function(ready, InlineEditBox, Textarea, request, string){
+            ready(function(){
+                var inputString = "",
+                    previewString = "",
+                    mdEditor = new InlineEditBox({
+                        editor: Textarea,
+                        renderAsHtml: true,
+                        buttonSave: "preview",
+                        buttonCancel: "cancel",
+                        autoSave: false,
+                        onClick: function(){
+                            this.set("value", inputString);
+                        },
+                        onChange: function(){
+                            var mdEditorval = this.get("value");
+                            if (string.trim(mdEditorval) != string.trim(previewString)){
+                                request.post(
+                                    "./md",
+                                    {
+                                        data:{
+                                            text: mdEditorval
+                                        }
+                                    }).then(
+                                        function(text){
+                                            inputString = mdEditorval;
+                                            previewString = text;
+                                            mdEditor.set("value", text);
+                                        },
+                                        function(error){
+                                            console.log("An error occurred: " + error);
+                                        }
+                                    );
+                            }
+                        }
+                    }, "markdown_editor");
+
+            });
+        });
+    </script>
+  </head>
+  <body class="claro">
+    <div id="markdown_editor">
+    </div>
+  </body>
+</html>
