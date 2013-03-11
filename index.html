@@ -21,17 +21,17 @@
                             this.set("value", inputString);
                         },
                         onChange: function(){
-                            var mdEditorval = this.get("value");
-                            if (string.trim(mdEditorval) != string.trim(previewString)){
+                            var mdEditorVal = this.get("value");
+                            if (string.trim(mdEditorVal) != string.trim(previewString)){
                                 request.post(
                                     "./md",
                                     {
                                         data:{
-                                            text: mdEditorval
+                                            text: mdEditorVal
                                         }
                                     }).then(
                                         function(text){
-                                            inputString = mdEditorval;
+                                            inputString = mdEditorVal;
                                             previewString = text;
                                             mdEditor.set("value", text);
                                         },

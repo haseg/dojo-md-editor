@@ -8,11 +8,10 @@ def index():
 
 @post('/md')
 def md():
-    param = request.POST
+    requestedParam = request.POST
     params = {
-        "text": param.text,
-        "mode": "gfm",
-        "context": "github/gollum"
+        "text": requestedParam.text,
+        "mode": "gfm"
         }
     res = urlopen('https://api.github.com/markdown', json.dumps(params))
     return res.read()
